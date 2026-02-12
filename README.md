@@ -4,7 +4,7 @@
 
 The library is designed to operate directly on `bytearray` data and provides both manual and automatic compression pipelines. All encoded outputs are self-describing and can be decoded without external metadata.
 
-Current version: **v0.1.0**
+Current version: **v0.2.0**
 
 ---
 
