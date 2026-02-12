@@ -1,9 +1,11 @@
 from simple_compression.algorithms.rle import RLE
 from simple_compression.algorithms.lz77 import LZ77
+from simple_compression.algorithms.huffman import HUFFMAN
 from simple_compression.probe import CompressionProbe
 
 HDR_RLE = 0x01
 HDR_LZ77 = 0x02
+HDR_HUFFMAN = 0x03
 
 MAGIC_0 = 0x53
 MAGIC_1 = 0x43
@@ -13,6 +15,7 @@ class SimpleCompression:
     def __init__(self, min_run=3, window_size=4096):
         self.rle = RLE(min_run=min_run)
         self.lz77 = LZ77(window_size=window_size)
+        self.huffman = HUFFMAN()
         self.probe = CompressionProbe(min_run=min_run)
 
     def encode(self, data, sequence=None, auto=False):
@@ -21,6 +24,7 @@ class SimpleCompression:
 
         if auto:
             sequence = self._auto_select(data)
+            print("AUTO:", sequence)
 
         if not sequence:
             return data
@@ -35,6 +39,9 @@ class SimpleCompression:
             elif alg == "LZ77":
                 output = self.lz77.encode(output)
                 headers.append(HDR_LZ77)
+            elif alg == "HUFFMAN":
+                output = self.huffman.encode(output)
+                headers.append(HDR_HUFFMAN)
             else:
                 raise Exception("Unknown algorithm")
 
@@ -74,6 +81,8 @@ class SimpleCompression:
                 output = self.rle.decode(output)
             elif header == HDR_LZ77:
                 output = self.lz77.decode(output)
+            elif header == HDR_HUFFMAN:
+                output = self.huffman.decode(output)
             else:
                 raise Exception("Invalid header")
             i -= 1
@@ -82,12 +91,7 @@ class SimpleCompression:
 
     def _auto_select(self, data):
         metrics = self.probe.analyze(data)
-        sequence = []
-
-        if metrics["use_rle"]:
-            sequence.append("RLE")
-        if metrics["use_lz77"]:
-            sequence.append("LZ77")
-
+        sequence = self.probe.process(metrics)
         return sequence
+
 
