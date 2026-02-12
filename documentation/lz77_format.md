@@ -1,4 +1,4 @@
-# LZ77 formatting
+# LZ77 Formatting
 
 ---
 

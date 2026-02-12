@@ -17,7 +17,9 @@ This project focuses on:
 - A simple API for chaining multiple compression stages
 - Safe and strict decoding
 
-This library does **not** attempt to compete with production compressors in performance. It is intended for correctness, clarity, and control.
+This library does **not** attempt to compete with production compressors in performance. It is intended for correctness, clarity, and control. 
+**BECAUSE OF PYTHON OVERHEAD THIS IS VERY SLOW AND NOT PRACTICAL FOR PRODUCTION USE**
+**AS OF RIGHT NOW THIS LIBRARY IS BEST DESIGNED FOR LEARNING ABOUT COMPRESSION EVENTUALLY IT WILL BE REWRITTEN IN C AND OPTIMIZED FOR PERFORMANCE**
 
 ---
 
@@ -25,6 +27,7 @@ This library does **not** attempt to compete with production compressors in perf
 
 - Run-Length Encoding (RLE)
 - LZ77
+- Huffman
 
 Each algorithm has a fully defined binary format and a strict decoder.
 
@@ -67,14 +70,16 @@ This allows for a really robust decoder which when combined with the spec docume
 Detailed binary formats for each algorithm are documented below.
 [RLE Format](documentation/rle_format.md)
 [LZ77 Format](documentation/lz77_format.md)
+[HUFFMAN Format](documentation/huffman_format.md)
 
 ---
 
 ## Road Map
 
-First is implementing a Huffman algorithm to really take advantage of the sequencing ability of this library.
-As features are added the automatic sequencing feature will be continuously tuned to ensure that rle is only enabled when it doesn't infalte the input. 
-As algorithms are added sequencing logic and metrics will develop alongside.
+Currently the library is functional. It has a composable pipeline of basic compression algorithms. 
+The probe for the `auto=True` argument has been redesigned to be more tunable and collect more metrics. 
+In testing it does better at avoiding using algorithms when the data doesn't fit their use case.
+The next part of development will be focused on rewritting the library in C so it can be usable outside of an educational setting.
 
 ---
 
