@@ -9,7 +9,9 @@ CORPUS_DIR = Path("benchmarks/canterbury")
 MODES = [
     ("RLE only", dict(sequence=["RLE"])),
     ("LZ77 only", dict(sequence=["LZ77"])),
+    ("HUFFMAN only", dict(sequence=["HUFFMAN"])),
     ("RLE → LZ77", dict(sequence=["RLE", "LZ77"])),
+    ("RLE -> LZ77 -> HUFFMAN", dict(sequence=["RLE", "LZ77", "HUFFMAN"])),
     ("AUTO", dict(auto=True)),
 ]
 
